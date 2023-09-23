@@ -1,0 +1,112 @@
+<div class='box centered' style='flex-grow: 1'>
+    <h1 class='tile'>Version 0.10.8 - May, 13, 2022</h1>
+    <h3 class='tile'>Textureswap refactoring and a whole lot more</h3>
+    <p> This update focused mostly on the texture swap option. I wanted do to a big  
+        refactoring, share as much code as possible between all the APIs, implement the
+        auto dump option for all the APIs and solve bugs. In the end, I've made less 
+        then I originally intended to, because it was taking to long and I really want t
+        o focus on the passthought layers next. Regardless, a lot was done in this 
+        update</p>
+    
+    <p>    Starting with some additions</p>
+    <ul>
+        <li><b>DirectX7:</b> Added the "Alpha textures fix" option. This was created to fix fonts
+          on Blade of darkness and may solve other bugs on other games that use alpha 
+          only textures. The correct rendering of fonts on Blade of darkness depends on 
+          alpha textures returning 1.0 for the color channels when sampled on the pixel 
+          stage. With the introduction of the programable pipeline, 
+          <a href='https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texld---ps-2-0'>
+          the default  value of the color channels in alpha only textures on the pixel shader was set
+          to 0.0.</a> On windows vista - and latter,
+          <a href='https://docs.microsoft.com/en-us/windows-hardware/drivers/display/converting-the-direct3d-fixed-function-state'>
+          the  Direct3D runtimes implement the fixed function pipeline with shaders</a>
+         
+          What I'm guessing happened here was that, at that point, the MS programers did not 
+          correctly replicated the fixed function alpha textures behavior on the pixel 
+          shaders emulating the fixed function pipeline.   
+          This fix is applied by replacing alpha only textures with full RGBA textures 
+          with the color channels set to 255.
+          
+        <li><b>DirectX7 and earlier:</b> Replaced the "FMV fix" option with the "GDI hooks" 
+          option. The old video for windows API, as well as the earliest DirectShow 
+          versions and also quicktime output video using GDI. The old "FMV fix" option
+          hooked 2 GDI functions - BitBlt and StretchBlt - to correctly upscale the FMVs 
+          when forced resolution is enabled, on games using these APIs. The hooks were 
+          now expanded - PatBlt, TextOutA and ExtTextOutA - to fix the menus on 
+          Hyperblade. I find unlikely that this will matter for other games. The 
+          Hyperblade demo is a Win16 program. So the game was probably Win16 GDI and 
+          was ported to Win32 Direct3D close to launch, keeping the existing code for 
+          the menus. Latter DirectDraw\Direct3D games DO use GDI A LOT, but they use GDI 
+          to draw on a DirectDraw surface, and this is already handled
+          
+        <li><b>DirectX7 and earlier:</b> New Win32 hooks. When forced resolution is enabled, some 
+          Win32 functions the game my call to retrieve the display resolution or window 
+          size are hooked. DirectDraw\Direct3D games don't use this a lot, so it was 
+          always handle case by case with game specific scripts. Now a set hooks with 
+          code common for all APIs is used. A common set of hooks is also used by the
+          "Fix window size" option. This doesn't change anything for the already
+          included games, but may help with future inclusions 
+          
+        <li><b>DirectX8:</b> IDirect3DDevice8::DrawIndexPrimitive and 
+          IDirect3DDevice8::DrawIndexPrimitiveUp are now hooked improving forced 
+          resolution compatibility. Forced resolution is now usable in Project Eden
+          
+        <li><b>DirectX9:</b> Added the "Borderless Fullscreen Window" option. This solves some 
+          bugs when forced resolution is enabled, like games crashing with alt-tab 
+          
+        <li><b>DirectX9:</b> Improved the "Fix window size" and added the "Resize window on 
+          device creation" options. The "Fix window size" option exists for all APIs to 
+          correctly resize the game window when forced resolution is enabled. On 
+          Direct3D9 it will never look like the game window was not correctly resized
+          - except if borderless fullscreen is enabled - because Direct3D9 will not 
+          clip the output to the window client area, but if the window is not correctly
+          resized, it will loose focus to the desktop when you click on it 
+          
+        <li><b>DirectX 10 and 11:</b> Added the "forced vsync" option
+        
+        <li><b>Opengl:</b> Improved forced resolution: The "resolution limit" option was added 
+          to handle games on which render resolution is not coupled with the display 
+          resolution. The functions glBitmap, glReadPixels, glDrawPixels, glReadRegion 
+          and glDrawRegion are now hooked. Improved the hooks on functions used to 
+          retrieve the display resolution and window size. Mouse hooks are now safe 
+          if called on a different thread then that making opengl calls
+        
+        <li><b>All APIs:</b> added a option to use a default replacement for all texture dumps 
+          missing a corresponding replacement
+          
+        <li>Extended the autodump option to Direct3D 7, 8 and 9 and opengl. This option
+          is still work in progress, but together with the option above, I can dump and 
+          replace several texture at once and this helps immensely to find and 
+          fix bugs. Texture swap as a whole now has a smaller CPU overhead and a much 
+          smaller memory overhead when dumps are not compiled 
+    </ul>      
+          
+    <p>Now some things that were fixed: </p>  
+        
+    <ul>
+        <li> Fixed autodump dumping all the mipmap levels on DirectX6 and earlier
+        <li> Fixed textures - and shaders - being dumped but not replaced in DirectX 10
+        <li> Fixed replacements not working except if they had the same number of mipmaps as the original texture on DirectX 10 and 11
+        <li>Fixed some textures being replaced, but the replacement being immediately discarded in Opengl - affects Anachronox 
+        <li>Fixed a bug loading compressed textures on Opengl
+        <li> Fixed crashes on Max Payne. This bug as quite nasty, because it would cause  the game to crash even if you tried to start it without peixoto's patch. The
+            "fix" disables texture swapping even if you enable it on the GUI, so it still needs improvement
+        <li> Fixed unresponsive menus on Die by the sword. This is a simple fix using the "QueryPerformanceCounter fix" option introduced in the previous update
+        <li> Fixed FMVs in Nocturne: the FMvs are now correctly upscaled. I'm aware of a extremely annoying issue in nocturne in the transition from gameplay to menus.
+             I'll try to fix it... eventually 
+        <li> Fixed a bug loading saves in Revenant  
+        <li> Fixed a memory leak on the MCI emulator
+        <li> Fixed crashes on FEAR when accessing the performance menu - needs fullscreen borderless window 
+    </ul>          
+                             
+    <p> Finally, 6 new games supported: </p>    
+    <ul> 
+        <li> Hyperblade: some glitches on the menus were fixed and also benefits from forced resolution and Super sampling anti-aliasing 
+        <li> Prince of persia and Bermuda Syndrome: not the original games but sld 
+          reimplementations of their engines: <a href='https://github.com/NagyD/SDLPoP'>SDL-POP</a> and
+          <a href='https://github.com/cyxx/bermuda'>bermuda</a> Both benefit from xBRz upscaling
+        <li> Blade of darkness: Fixes texts and the non working Gamma\Brighness\Conrtrast controls on Direct3D mode. 
+             Forced resolution and Super sampling anti-aliasing work on both Direct3D and OpenGl
+        <li> Return to Castle Wolfenstein and Wolfenstein-2009, both benefit from Forced resolution\Super sampling anti-aliasing 
+    </ul>    
+</div>

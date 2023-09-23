@@ -1,0 +1,19 @@
+<div class='box centered' style='flex-grow: 1'>
+    <h1 class='tile'>Version 0.10.10 - February, 28, 2023</h1>
+    <h3 class='tile'>DirectSound Passthrough layer and EAX emulation.
+    </h3> 
+    <h3>   
+        EAX emulation is a work in progress, only eax 1 and 2 are supported and some 
+        bells and whistles of eax 2.0 reverb are not yet implemented. A better 
+        implementation will be added in the next update which will also improve some 
+        aspects of the DirectInput layer before we can go back to graphics on version
+        0.10.12. The positional sound implementation however will remain very basic for 
+        now: distance attenuation, sound cones and a simple left and right panning</h3>         
+    <h3>Other small fixes on this update</h3>  
+    <ul>
+        <li>Changed a single value on the rain world.ini file which was causing the program not to scale the game window correctly</li>
+        <li>Updated the <a href='https://learn.microsoft.com/en-us/windows/win32/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath'>
+            SHGetKnownFolder</a> hook to handle the <a href=' https://learn.microsoft.com/en-us/windows/win32/shell/knownfolderid'>
+            FOLDERID_SavedGames</a> id</li>
+    </ul>      
+</div>

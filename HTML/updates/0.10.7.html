@@ -1,0 +1,46 @@
+<div class='box centered' style='flex-grow: 1'>
+    <h1 class='tile'>Version 0.10.7 - November, 10, 2021</h1>
+    <h3 class='tile'>This version was lost and is not included in the old versions download link</h3>
+    <pre> 
+      - Refactoring of the Direct3D (9 and earlier) user mode display driver hooks. 
+        These hooks are used to allow pixel shaders on Direct3D 7 and earlier, allow 
+        HLSL shaders on Direct3D 8, fix w fog on some Direct3D 7 and earlier games and
+        to fix a transparency bug on Star wars dark forces II. The refactoring aims to 
+        improve the maintainability of the code. This hooks will also be the base for 
+        future fixes related to alpha testing and z bias bugs in some games 
+        
+      - Improved the detection of transformed vertices on Direct3D 9 when forced 
+        resolution is enabled. Transformed vertices have to be correctly detected 
+        because they have to scaled on the CPU. 
+        
+      - Fixed a bug on the IDirect3DSurface8::GetDesc and 
+        IDirect3DDevice8::CreatePixelShader hooks that crashed some games
+        
+      - Improved compatibility of FidelityFx super resolution upscaling on both
+        Direct3D 11 and 12   
+        
+      - Added the QueryPerformanceCounter fix. This fix changes the behavior of the 
+        QueryPerformanceCounter function to report not the number of counts since 
+        windows was started, but since the current process was started. This was 
+        implemented to fix low frame rates on Jade empire, but i've heard of other 
+        games that need this as well. Since timeGetTime calls are redirected to 
+        QueryPerformanceCounter when the high resolution timers options is enabled, 
+        this option can fix games that use that function as well
+        
+      - Small refactoring of the Saves redirection feature. A new option to handle 
+        Xlive games was added. A code path that handled Unreal 1 and 2 games was 
+        removed, but instructions on how to adapt the system links option to these 
+        games were added  
+        
+      - Integrated a Fix created by others that disables TXAA on control   
+        
+      - Added 9 new games: 4 which benefit from forced resolution because they shrink
+        their UIs, HUD or texts on higher resolutions: Jade Empire, 
+        Start Trek Elite Force 2, Star Trek: Deep Space Nine - The Fallen and Enclave. 
+        3 which benefit from  FidelityFx super resolution: The Talos Priciple, 
+        Death's Door, and Resident Evil 2 Remake. Finally, another 3 games
+        on which forced resolution is not entirely necessary, but benefit from it because
+        it allows super sampling anti aliasing: Star Trek: Voyager - Elite Force, 
+        The Void and Sudeki 
+    </pre>        
+</div>

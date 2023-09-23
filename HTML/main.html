@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="generator" content="PSPad editor, www.pspad.com">
+    <title></title>
+</head>
+<body class="main">
+    <style>
+        h3{
+            margin-left: 5px;
+            margin-right: 5px;   
+        }
+        :root {
+            --bg-color       : #eeeeee;
+            --front-color    : #000000;
+            --decor-color    : LightSteelBlue;
+        }
+        p {
+            margin-left: 15px;   
+            margin-right: 10px;               
+        }
+        li, ul{
+            margin-right: 10px; 
+        }
+        button{
+            background-color: var(--decor-color);
+            color           : var(--front-color);
+            height          : 36px;
+            border          : None;
+            border-radius   : 5px; 
+            padding-left    : 5px;   
+            padding-right   : 5px;   
+        }
+        button:hover{
+            background-color: var(--bg-color );
+            cursor          : pointer;
+            border          : 1px solid;
+        }
+        /*
+        a:link {
+            color      : var(--front-color);      
+        }
+        a:visited {
+            color      : var(--front-color);      
+        }
+        */
+        li{
+            margin: 10px 0;
+        }
+        .box {
+            border-radius   : 5px;   
+            border          : 2px solid var(--decor-color);      
+        }
+        .main {
+            background-color: var(--bg-color) ;
+            color           : var(--front-color);
+            border-radius   : 5px; 
+            font-size       : 18;  
+            text-align: justify;    
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;               
+        }
+        .column {
+            display       : flex; 
+            flex-direction: column; 
+            gap           : 5px;    
+        }
+        .row {
+            display       : flex; 
+            flex-direction: row; 
+            gap           : 5px;        
+        }
+        .centered {
+            margin: 1%;
+        }
+        .tile {
+            background-color         : var(--decor-color);
+            color                    : var(--front-color);
+            border-top-left-radius   : 0px;  
+            border-top-right-radius  : 0px;  
+            margin                   : 0%;
+        }
+        .tooltip {
+            position     : relative;
+            display      : inline-block;            
+        }
+        
+        .tooltip .tooltiptext {
+            visibility      : hidden;            
+            background-color: black;
+            color           : #fff;
+            text-align      : center;
+            padding         : 5px 0;
+            border-radius   : 6px;       
+            position        : absolute;
+            z-index         : 1;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+    </style>
+    <div class='column main' style='height: 100%; overflow:clip;'>
+        <div class='box main' style='height: 200px;' id='header'>
+           <h3>This page has the update history for peixoto's patch</h3>
+           <p>Peixoto's patch is a program designed to make old games - and also 'not so old games' - run again or run better on windows 10<br>
+            Peixoto's patch not only fixes bugs, but allows enhancements on graphics, sound and input<br> 
+            Peixoto's patch includes profiles with fixes for over 100 games and new profiles with a long list of optional fixes and improvements
+            can be created by the user</p>
+            <div class='row' style='padding-left: 15px; margin-bottom: 0px; padding-bottom: 0px; border-radius: 5px;'>
+                <button onclick="window.open('https://1drv.ms/u/s!ApHOE-Ru-xkGgZkOtWEHQyuRYq2NWQ?e=VD0U6w');">Download - ver: 0.10.11</button>
+                <button onclick="window.open('https://1drv.ms/u/s!ApHOE-Ru-xkGgrAi36Xs1icstHe4FQ?e=I70kYs');">Download - old versions</button>
+                <button onclick="window.open('https://www.patreon.com/bePatron?u=44312848');">Get and offer support</button>
+                <a href="https://www.patreon.com/bePatron?u=44312848" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
+                <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+            </div>    
+        </div>   
+        <div class='row main' style='flex-grow: 1'>
+            <div class='box main column' id='updates_list' style='width: 400px;'>       
+                <p style='font-size: 14'>Hover the mouse over the links for a summary of the update</p>         
+            </div>
+            <div class='main' id='updates_contents' style='overflow-y:scroll; width: 100%;'>                
+                {% for update in updates %}
+                    {{update}}
+                {% endfor %} 
+            </div>
+        </div>         
+    </div>
+    <script>
+        document.body.onresize = function() {            
+            var header = parseFloat(document.getElementById('header').style.height) + 30;            
+            document.getElementById('updates_list').style.height     = window.innerHeight - header;
+            document.getElementById('updates_contents').style.height = window.innerHeight - header;            
+        }
+        document.body.onresize();
+        var list = document.getElementById('updates_list')
+        for (child of document.getElementById('updates_contents').children)
+        {
+            var div                   = document.createElement('div') ;        
+            var link                  = document.createElement('a');
+            var tooltip               = document.createElement('span');
+            tooltip.className         = 'tooltiptext';
+            tooltip.style.width       = '300px';
+            tooltip.innerHTML         = child.children[1].innerHTML
+            div.className             = 'tooltip';
+            link.taget                = child
+            link.innerHTML            = child.children[0].innerHTML;
+            link.style.fontSize       = '14';
+            link.style.color          = 'blue';
+            link.style.marginLeft     = '5px';   
+            link.style.marginRight    = '5px'; 
+            link.style.cursor         = 'pointer';
+            link.style.textDecoration = "underline";  
+            link.onclick = function() {
+                this.taget.scrollIntoView();
+            }
+            list.appendChild(div);
+            div.appendChild(link);
+            div.appendChild(tooltip);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<div class='box centered' style='flex-grow: 1'>
+    <h1 class='tile'>Version 0.10.9 - November, 19, 2022</h1>
+    <h3 class='tile'>DirectInput focused update with the peixoto's patch 1st Passthrough layer
+    </h3>    
+    <h3>PASSTHTOUGH LAYERS</h3>
+    <p>The Passthought layers are fundamental to make peixoto's patch "future proof". Peixoto's patch does most of what it does 
+    by intercepting and modifying the communication between the game and DirectX. Microsoft uses the exact same method to 
+    maintain the compatibility of their older APIs, and the hooks - peixoto's and Microsoft's - can sometimes conflict. 
+    Currently, theses conflicts are handled case by case, but while Microsoft doesn't update the old APIs anymore, they update 
+    their compatibility layers, and those updates offten re-introduce solved conflicts, so obviously, I need a "universal" 
+    method to handle those conflicts. This is the purpose of the passthought layers</p>
+    <p>The Passthrough layers are a fake DirectX layer the passes unmodified DirectX 
+    calls from the game to DirectX. On it's own we would have something like this:<br><br>
+    
+    Game &#8594; Passthrough layer (Fake DirectX) &#8594; Real DirectX<br><br>
+    
+    but when we consider peixoto's and Microsoft's hooks, the layer isolates them 
+    from each other<br><br>
+    
+    Game &#8594; Peixoto's hooks &#8594; Fake DirectX &#8594;MS Shims &#8594; Real DirectX<br><br>
+    
+    The Passthrough layers will also make Peixoto's path compatible with other 
+    wrappers and solves problems with inheritance, which are aways a pain to handle<br><br>
+
+    The 1st Passthrough layer is for DIRECTINPUT. It's a simple layer, so ot was 
+    the best one to start. Without going into much detail, the hard ones will be 
+    DirectDraw\Direct3D <=7, even DirectX 10 and latter will be easy.
+    With the layer, I've also implemented several fixes and additions on DirectInput</p>
+
+    <h3>DIRECTINPUT</h3>
+    <ul>
+        <li> Fixed the reporting of the analog sticks position which as broken in many games  
+        <li> Fixed mapping of the thumbsticks buttons, whick could be mapped to a different DirectInput button as the one intended
+        <li> Added support for games the use custom data formats to retrieve gamepad data
+        <li> Added support for games the retrieve buffered data instead of immediate data 
+        <li> Improved force feedback support. I know very little games that use force feedback, so this didn't have a lot of testing
+    </ul>
+
+    <h3>OPENGL</h3>   
+    <ul>
+        <li>Fixed bugs on the glDrawPixels and glBitmap hooks, Affects Strangers Wrath and blade of darkness
+        <li>Fixed super sampling anti aliasing, affects Alone in the Dark, Sphinyx, Strangers Wrath and maybe others  
+    </ul>      
+        
+    <h3>DIRECT9</h3>  
+    <ul>
+        <li>Fixed a bug rendering texts - used to search for texture and shaders - on Direct3D9Ex
+        <li>Broke &#x1F610 texture swapping in half life 
+    </ul>         
+    
+    <h3>ALL GRAPHICS APIS</h3> 
+    <ul> 
+        <li>Fixed a bug on the EnumDisplaySettingsExW Hook. When enumerating the current resolution, this function would return the display height 
+        incorrectly - equal to the width. I found this bug while setting forced resolution on Hyper Light Drifter, a game that doesn't need forced 
+        resolution, but I aways test all games I play to improve compatibility
+        <li>Added a GetMessagePos hook. This is used to report the mouse position 'correctly' when forced resolution is enabled       
+    </ul>    
+        
+    <h3>MCI</h3>
+    <ul>
+        <li>mciSendCommand: MCI_STATUS (track position), would return position of the next track when time format was milisseconds
+        <li>mciSendCommand: MCI_PLAY would play the wrong track when time format was milisseconds, this fixes shadows of the empire  
+    </ul>      
+        
+    <h3>FILE REDIRECTION</h3>
+    <ul>
+        <li> Fixed bugs on the SHGetKnownFolderPath and SHGetFolderLocation hooks
+        <li> New hooks to handle games the retrieve the spacial folders path from enviroment variables 
+    </ul>   
+    
+    <h3>GAME SPECIFIC FIXES</h3>
+    <ul> 
+        <li>Wheel of time, fixed a bug on FMV playback that caused the audio the game was playing before the FMV start, to continue playing  
+        <li>Rainworld, fixed some incorrect values on the ini files which prevented the unfiltered upscaling from working   
+    </ul>   
+                        
+    <h3>NEW GAMES</h3>
+    <ul> 
+        <li>5 games that have cheat tables and nothing else: Guacamelee 1 and 2, Ori 1 and 2 and Iconoclasts
+        <li>3 Games the benefit from forced resolution and also have cheat tables: SIGNALIS, Sphinyx and the cursed mummy and Star trek Klingon honour guard.
+        The last benefits from several other fixed ass well
+    </ul>      
+
+    <h3>OTHER</h3>
+    <ul>
+        <li>Restored compatibility with windows 7. The previous version required Win 8  and latter, this happened in the migration of the build system from 
+            Qt creator\Qmake to Visual Studio\Cmake, but is fixed now
+        <li>RThe GUI now runs on top of MS edge instead of Qt's webengine. This reduces the download size from about 50 MB to 5 MB  
+        <li> Createprocess hook, When a 32 bit program launches a 64 bit program, the injector fails to 'inject' peixoto's patch on the child program, this wasn't
+        entirely fixed, but at least in wont prevent the child program from 
+        starting, this fixes freezing on TR reboot
+    </ul>      
+
+    <h3>CHEAT TABLES</h3>
+    <ul>
+        <li> Star trek Deep space nine - the fallen
+        <li> Star trek Klingon honour guard
+        <li>The Wheel of time
+        <li> Iconoclasts  
+        <li> Half Life 2 and episodes
+        <li> Ori 1 and 2
+        <li> Guacamelee 1 and 2
+        <li>Rune 
+        <li> Improved Deus Ex Heuristics
+        <li> SIGNALIS
+        <li> Fixed one hit kill glitch in control             - uploaded jun 06
+        <li> Fixed RTCW attaching (still need manual attach)  - uploaded jun 01
+        <li> Fixed inf Ammo on wolfenstein 2009               - uploaded jun 01 
+        <li> Septerra core, added one hit kills               - uploaded jun 01 
+    </ul>        
+</div>
