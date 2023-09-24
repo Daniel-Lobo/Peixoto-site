@@ -7,14 +7,14 @@
     by intercepting and modifying the communication between the game and DirectX. Microsoft uses the exact same method to 
     maintain the compatibility of their older APIs, and the hooks - peixoto's and Microsoft's - can sometimes conflict. 
     Currently, theses conflicts are handled case by case, but while Microsoft doesn't update the old APIs anymore, they update 
-    their compatibility layers, and those updates offten re-introduce solved conflicts, so obviously, I need a "universal" 
+    their compatibility layers, and those updates offten re-introduce previously solved conflicts, so I need a more robust 
     method to handle those conflicts. This is the purpose of the passthought layers</p>
     <p>The Passthrough layers are a fake DirectX layer the passes unmodified DirectX 
-    calls from the game to DirectX. On it's own we would have something like this:<br><br>
+    calls from the game to DirectX. With the layer alone we would have something like this:<br><br>
     
     Game &#8594; Passthrough layer (Fake DirectX) &#8594; Real DirectX<br><br>
     
-    but when we consider peixoto's and Microsoft's hooks, the layer isolates them 
+    but when we put peixoto's and Microsoft's hooks on the picture, the layer isolates them 
     from each other<br><br>
     
     Game &#8594; Peixoto's hooks &#8594; Fake DirectX &#8594;MS Shims &#8594; Real DirectX<br><br>
@@ -45,7 +45,7 @@
     <h3>DIRECT9</h3>  
     <ul>
         <li>Fixed a bug rendering texts - used to search for texture and shaders - on Direct3D9Ex
-        <li>Broke &#x1F610 texture swapping in half life 
+        <li>Broke &#x1F610 texture swapping in half life 2
     </ul>         
     
     <h3>ALL GRAPHICS APIS</h3> 
@@ -65,13 +65,13 @@
     <h3>FILE REDIRECTION</h3>
     <ul>
         <li> Fixed bugs on the SHGetKnownFolderPath and SHGetFolderLocation hooks
-        <li> New hooks to handle games the retrieve the spacial folders path from enviroment variables 
+        <li> New hooks to handle games the retrieve the special folders path from enviroment variables 
     </ul>   
     
     <h3>GAME SPECIFIC FIXES</h3>
     <ul> 
         <li>Wheel of time, fixed a bug on FMV playback that caused the audio the game was playing before the FMV start, to continue playing  
-        <li>Rainworld, fixed some incorrect values on the ini files which prevented the unfiltered upscaling from working   
+        <li>Rainworld, fixed some incorrect values on the ini file which prevented the unfiltered upscaling from working   
     </ul>   
                         
     <h3>NEW GAMES</h3>
@@ -85,9 +85,9 @@
     <ul>
         <li>Restored compatibility with windows 7. The previous version required Win 8  and latter, this happened in the migration of the build system from 
             Qt creator\Qmake to Visual Studio\Cmake, but is fixed now
-        <li>RThe GUI now runs on top of MS edge instead of Qt's webengine. This reduces the download size from about 50 MB to 5 MB  
+        <li>The GUI now runs on top of MS edge instead of Qt's webengine. This reduces the download size from about 50 MB to 5 MB  
         <li> Createprocess hook, When a 32 bit program launches a 64 bit program, the injector fails to 'inject' peixoto's patch on the child program, this wasn't
-        entirely fixed, but at least in wont prevent the child program from 
+        entirely fixed, but at least in won't prevent the child program from 
         starting, this fixes freezing on TR reboot
     </ul>      
 
