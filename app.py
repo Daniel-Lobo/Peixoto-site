@@ -14,7 +14,7 @@ def template(file):
 
 @app.route("/News")
 async def news():
-    files   = ['0.10.11', '0.10.10', '0.10.9', 'Signalis-HD', '0.10.8b', '0.10.8', '0.10.7', '0.10.6']
+    files   = ['0.10.12', '0.10.11', '0.10.10', '0.10.9', 'Signalis-HD', '0.10.8b', '0.10.8', '0.10.7', '0.10.6']
     updates = [template(f'updates/{file}'.replace('.html', '')) for file in files]
     return Template(template('main')).render(updates=updates)
 
